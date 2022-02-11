@@ -1,4 +1,6 @@
-from solver import solve
+from solver import solve as solve
+from solver import brute_solve
+from solver import calculate_score
 from parse import parse_file
 import os
 import time
@@ -9,16 +11,10 @@ OUT_DIR = "output/"
 TOP_SCORES = "best_scores.json"
 TOP_SOLVES = "best_solutions.json"
 
-def calculate_score(solution, customers):
-    ingredients = set(solution.split()[1:])
-    score = 0
-    for c in customers:
-        if c.likes_pizza(ingredients):
-            score += 1
-    return score
-
 if __name__ == "__main__":
     files = os.listdir(IN_DIR)
+    easy_files = sorted(files)[0:3]
+    hard_files = sorted(files)[3:]
 
     # Save / Load best scores and solutions files
     if TOP_SCORES not in os.listdir():
@@ -38,13 +34,16 @@ if __name__ == "__main__":
         start = time.time()
         customers = parse_file(IN_DIR + f)
         
-        solution = solve(customers)
+        if f in easy_files:
+            solution = brute_solve(customers)
+        else:
+            solution = solve(customers)
         print(f"Completed file {f} in {time.time() - start} seconds")
 
         score = calculate_score(solution, customers)
-        print(f"Score for file {f} = {score}")
+        print(f"Score for file {f} = {score} -- (current best: {best_scores[f]})")
         if score > best_scores[f]:
-            print(f"NEW BEST SCORE FOR FILE {f}: {score} -- (previous best: {best_scores[f]})")
+            print(f"### NEW BEST SCORE FOR FILE {f}: {score} -- (previous best: {best_scores[f]}) ###")
             best_scores[f] = score
             best_solves[f] = solution
             with open(TOP_SCORES, "w") as outfile:
