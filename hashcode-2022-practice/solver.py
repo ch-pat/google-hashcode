@@ -1,5 +1,5 @@
 from parse import parse_file
-import os
+import os, random
 import itertools
 
 def solve(i):
@@ -30,6 +30,30 @@ def solve2(i):
         elif ing not in liked:
             continue
         elif liked[ing] >= disliked[ing] * 1.0:
+            result += [ing]
+    return str(len(result)) + " " + " ".join(result)
+
+def hyper_solve(i):
+    a = random.random()
+    b = random.random()
+    print(f"Hyperparameters: a: {a}, b: {b}")
+    liked = {}
+    disliked = {}
+    all_ingredients = set([])
+    result = []
+    for customer in i:
+        for ing in customer.likes:
+            add_ingredient(liked, ing, 1 / len(customer.likes))
+            all_ingredients = all_ingredients.union({ing})
+        for ing in customer.dislikes:
+            add_ingredient(disliked, ing, 1)
+            all_ingredients = all_ingredients.union({ing})
+    for ing in all_ingredients:
+        if ing not in disliked:
+            result += [ing]
+        elif ing not in liked:
+            continue
+        elif liked[ing] * a >= disliked[ing] * b:
             result += [ing]
     return str(len(result)) + " " + " ".join(result)
 
