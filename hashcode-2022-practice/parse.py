@@ -4,7 +4,8 @@ class Customer:
         self.dislikes: set = dislikes
 
     def likes_pizza(self, ingredients: set):
-        return self.likes.issubset(ingredients) and self.dislikes.isdisjoint(ingredients)
+        # Order here is important! isdisjoint will usually be faster than issubset.
+        return self.dislikes.isdisjoint(ingredients) and self.likes.issubset(ingredients)
 
 
     def __str__(self):

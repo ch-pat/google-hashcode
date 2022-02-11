@@ -1,4 +1,4 @@
-from solver import solve as solve
+from solver import greedy_solve2 as solve
 from solver import brute_solve
 from solver import calculate_score
 from parse import parse_file
@@ -13,6 +13,7 @@ TOP_SOLVES = "best_solutions.json"
 
 if __name__ == "__main__":
     files = os.listdir(IN_DIR)
+    files.remove("e_elaborate.in.txt")
     easy_files = sorted(files)[0:3]
     hard_files = sorted(files)[3:]
 
